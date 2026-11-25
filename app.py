@@ -13,9 +13,11 @@ st.markdown(
 )
 
 # Récupération de la clé API (via secrets Streamlit en prod ou variable locale)
-api_key = st.sidebar.text_input(
-    "Clé API Gemini", type="password", value=os.getenv("GEMINI_API_KEY", "")
-)
+default_key = st.secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY", ""))
+if default_key:
+    api_key = default_key
+else:
+    api_key = st.sidebar.text_input("Clé API Gemini", type="password")
 
 # Schéma de la base envoyé au LLM pour qu'il comprenne les tables
 DB_SCHEMA = """
